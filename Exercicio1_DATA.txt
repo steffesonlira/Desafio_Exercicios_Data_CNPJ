@@ -1,0 +1,65 @@
+
+'Crie uma função que receba uma data válida como parâmetro e
+'retorne um texto apresentando a diferença em anos, meses e dias
+'em relação a data de hoje.
+'Exemplo de retorno: 5 anos, 3 meses e 2 dias
+
+Sub Datas()
+
+
+Dim dataHoje, dataRecebida As String
+
+' Recebe a data atual
+dataHoje = CStr(Date)
+' Data recebida do usuário
+dataRecebida = InputBox("Digite uma data")
+
+retorno = fncDataCompleta(CDate(dataRecebida))
+
+MsgBox ("A diferença entre a data " & dataRecebida & " e a data de hoje " & dataHoje & _
+" é de exatamente:" & vbCr & vbCr & retorno), vbInformation
+
+
+End Sub
+
+Private Function fncDataCompleta(dataRecebida As Date) As String
+Dim anos As Byte, meses, dias As Byte, dataCompleta As Date
+Dim retorno As Boolean
+ 
+If dataRecebida > Date Or dataRecebida = 0 Then
+    fncDataCompleta = "A data fornecida é uma data futura ou é a data atual!"
+    Exit Function
+End If
+
+If dataRecebida = Date Then
+    fncDataCompleta = 0
+    Exit Function
+End If
+ 
+'Ajusta ano bissexto
+dataRecebida = IIf(Format(dataRecebida, "mm/dd") = "02/29", dataRecebida - 1, dataRecebida)
+ 
+'Coleta a diferença em anos
+anos = Int((Format(Date, "yyyymmdd") - Format(dataRecebida, "yyyymmdd")) / 10000)
+ 
+retorno = (Format(dataRecebida, "mmdd") > Format(Date, "mmdd"))
+
+dataCompleta = DateSerial(Year(Date) + retorno, Format(dataRecebida, "mm"), Format(dataRecebida, "dd"))
+
+'Coleta a diferença em meses
+meses = DateDiff("m", dataCompleta, Date) + (Format(dataRecebida, "dd") > Format(Date, "dd"))
+ 
+retorno = (Format(dataRecebida, "dd") > Format(Date, "dd"))
+
+dataCompleta = DateSerial(Year(Date), Format(Date, "mm") + retorno, Format(dataRecebida, "dd"))
+
+dataCompleta = IIf(Format(dataRecebida, "dd") <> Format(dataCompleta, "dd"), dataCompleta - Format(dataCompleta, "dd"), dataCompleta)
+
+'Coleta a diferença em dias
+dias = CDbl(Date) - CDbl(dataCompleta)
+
+fncDataCompleta = IIf(anos <= 1, IIf(anos = 0, "", anos & " ano "), anos & " anos ") & _
+                              IIf(meses <= 1, IIf(meses = 0, "", meses & " mes "), meses & " meses ") & _
+                              IIf(dias <= 1, IIf(dias = 0, "", dias & " dia "), dias & " dias ")
+End Function
+

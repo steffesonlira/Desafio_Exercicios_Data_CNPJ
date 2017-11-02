@@ -1,0 +1,92 @@
+Option Explicit
+
+' Exercício 2 Desafio - Validação CNPJ
+'  Crie uma função que recebido um string referente ao  cnpj de uma empresa retorne true & _
+se o cnpj for um cnpj valido, ou false se o cnpj for inválido
+' Exemplo de retorno : 11123457/0001-89  retorna false pois é inválido
+
+Public Function CheckCNPJ(sCNPJ As String) As String
+
+'Declaração de variáveis
+   Dim v1, v2, contador, v4, v5 As Double
+   
+  ' Condição para verificação CNPJ se for igual a 8 dígitos
+   If Len(sCNPJ) = 8 And Val(sCNPJ) > 0 Then
+      v1 = 0
+      v2 = 0
+      v4 = 0
+      For contador = 1 To 7
+         v1 = Val(Mid(sCNPJ, contador, 1))
+         If (v1 Mod 2) <> 0 Then
+            v1 = v1 * 2
+         End If
+         If v1 > 9 Then
+            v2 = v2 + Int(v1 / 10) + (v1 Mod 10)
+         Else
+            v2 = v2 + v1
+         End If
+      Next contador
+      v4 = IIf((v2 Mod 10) <> 0, 10 - (v2 Mod 10), 0)
+      If v4 = Val(Mid(sCNPJ, 8, 1)) Then
+         CheckCNPJ = "Válido"
+      Else
+         CheckCNPJ = "Inválido"
+      End If
+      ' Se for digitado um CNPJ com 14 dígitos
+   Else
+      If Len(sCNPJ) = 14 And Val(sCNPJ) > 0 Then
+         v1 = 0
+         contador = 0
+         v4 = 0
+         v5 = 0
+         v2 = 5
+         For contador = 1 To 12
+            v1 = v1 + (Val(Mid(sCNPJ, contador, 1)) * v2)
+            v2 = IIf(v2 > 2, v2 - 1, 9)
+         Next contador
+         v1 = v1 Mod 11
+         v4 = IIf(v1 > 1, 11 - v1, 0)
+         v1 = 0
+         contador = 0
+         v2 = 6
+         For contador = 1 To 13
+            v1 = v1 + (Val(Mid(sCNPJ, contador, 1)) * v2)
+            v2 = IIf(v2 > 2, v2 - 1, 9)
+         Next contador
+         v1 = v1 Mod 11
+         v5 = IIf(v1 > 1, 11 - v1, 0)
+         If (v4 = Val(Mid(sCNPJ, 13, 1)) And v5 = Val(Mid(sCNPJ, 14, 1))) Then
+            CheckCNPJ = "CNPJ Válido"
+         Else
+            CheckCNPJ = "CNPJ Inválido"
+         End If
+      Else
+         CheckCNPJ = "CNPJ Inválido"
+      End If
+   End If
+End Function
+
+ Sub CNPJ()
+ 
+ Dim verificador As String
+ Dim CNPJ As String
+ 
+ CNPJ = InputBox("Digite um cnpj")
+ verificador = CheckCNPJ(CNPJ)
+  
+ MsgBox verificador
+ 
+  While Len(CNPJ) > 14
+  
+   
+        MsgBox ("Por favor digite  apenas números ex: 00000000000000"), vbExclamation
+        CNPJ = InputBox("Digite um cnpj")
+        verificador = CheckCNPJ(CNPJ)
+  
+ MsgBox verificador
+
+ Wend
+ 
+ End Sub
+
+
