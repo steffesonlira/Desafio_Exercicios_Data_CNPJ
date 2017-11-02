@@ -1,23 +1,23 @@
 
-'Crie uma função que receba uma data válida como parâmetro e
-'retorne um texto apresentando a diferença em anos, meses e dias
-'em relação a data de hoje.
+'Crie uma funÃ§Ã£o que receba uma data vÃ¡lida como parÃ¢metro e
+'retorne um texto apresentando a diferenÃ§a em anos, meses e dias
+'em relaÃ§Ã£o a data de hoje.
 'Exemplo de retorno: 5 anos, 3 meses e 2 dias
 
 Sub Datas()
 
 
-Dim dataHoje, dataRecebida As String
+Dim dataHoje, dataRecebida, retorno As String
 
 ' Recebe a data atual
 dataHoje = CStr(Date)
-' Data recebida do usuário
+' Data recebida do usuÃ¡rio
 dataRecebida = InputBox("Digite uma data")
 
 retorno = fncDataCompleta(CDate(dataRecebida))
 
-MsgBox ("A diferença entre a data " & dataRecebida & " e a data de hoje " & dataHoje & _
-" é de exatamente:" & vbCr & vbCr & retorno), vbInformation
+MsgBox ("A diferenÃ§a entre a data " & dataRecebida & " e a data de hoje " & dataHoje & _
+" Ã© de exatamente:" & vbCr & vbCr & retorno), vbInformation
 
 
 End Sub
@@ -27,7 +27,7 @@ Dim anos As Byte, meses, dias As Byte, dataCompleta As Date
 Dim retorno As Boolean
  
 If dataRecebida > Date Or dataRecebida = 0 Then
-    fncDataCompleta = "A data fornecida é uma data futura ou é a data atual!"
+    fncDataCompleta = "A data fornecida Ã© uma data futura ou Ã© a data atual!"
     Exit Function
 End If
 
@@ -39,14 +39,14 @@ End If
 'Ajusta ano bissexto
 dataRecebida = IIf(Format(dataRecebida, "mm/dd") = "02/29", dataRecebida - 1, dataRecebida)
  
-'Coleta a diferença em anos
+'Coleta a diferenÃ§a em anos
 anos = Int((Format(Date, "yyyymmdd") - Format(dataRecebida, "yyyymmdd")) / 10000)
  
 retorno = (Format(dataRecebida, "mmdd") > Format(Date, "mmdd"))
 
 dataCompleta = DateSerial(Year(Date) + retorno, Format(dataRecebida, "mm"), Format(dataRecebida, "dd"))
 
-'Coleta a diferença em meses
+'Coleta a diferenÃ§a em meses
 meses = DateDiff("m", dataCompleta, Date) + (Format(dataRecebida, "dd") > Format(Date, "dd"))
  
 retorno = (Format(dataRecebida, "dd") > Format(Date, "dd"))
@@ -55,7 +55,7 @@ dataCompleta = DateSerial(Year(Date), Format(Date, "mm") + retorno, Format(dataR
 
 dataCompleta = IIf(Format(dataRecebida, "dd") <> Format(dataCompleta, "dd"), dataCompleta - Format(dataCompleta, "dd"), dataCompleta)
 
-'Coleta a diferença em dias
+'Coleta a diferenÃ§a em dias
 dias = CDbl(Date) - CDbl(dataCompleta)
 
 fncDataCompleta = IIf(anos <= 1, IIf(anos = 0, "", anos & " ano "), anos & " anos ") & _
